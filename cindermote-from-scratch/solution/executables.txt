@@ -1,0 +1,6 @@
+guest/agent_probe_agent.py
+guest/browser_agent.py
+mote/detonate.py
+scripts/generate-agent-probe-keys.py
+scripts/open-agent-probe-evidence.py
+scripts/verify-incident-gate-evidence.py

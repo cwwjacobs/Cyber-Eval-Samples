@@ -1,0 +1,29 @@
+schema_version = "1.4"
+
+[task]
+name = "cwwjacobs/cindermote-from-scratch"
+description = "Build Cindermote, a fail-closed containment runtime for untrusted AI-agent material (Firecracker microVM orchestration, a pinned-DNS egress proxy, HPKE-sealed evidence and HMAC-signed receipts), from its documentation and test suite, with none of its Python source provided."
+authors = [{ name = "Corey Jacobs" }]
+keywords = ["security", "sandboxing", "firecracker", "cryptography", "hpke", "egress-proxy", "signed-receipts", "reimplementation", "python"]
+
+[metadata]
+difficulty = "hard"
+category = "security-systems"
+source_commit = "67d993ed672a317dc92a00e4a49aabfef87f666d"
+
+[agent]
+timeout_sec = 72000.0
+user = "agent"
+
+[verifier]
+# The full suite takes about a minute; the rest is headroom for slow or hanging candidates.
+timeout_sec = 1800.0
+user = "root"
+
+[environment]
+build_timeout_sec = 1800.0
+cpus = 4
+memory_mb = 8192
+storage_mb = 10240
+# No egress beyond an installed agent's own model endpoint, which Harbor adds automatically.
+network_mode = "allowlist"

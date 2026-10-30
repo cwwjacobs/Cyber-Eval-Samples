@@ -1,0 +1,16 @@
+Cindermote
+Copyright 2026 Corey Jacobs
+
+Current license: PolyForm Noncommercial License 1.0.0
+Commercial licensing: Corey Jacobs <coresynth@gmail.com>
+
+This product includes software developed by Corey Jacobs
+(GitHub: cwwjacobs).
+
+Commits before 2026-10-30 carried an Apache License 2.0 file. For that whole
+period the repository was private with no forks and a single collaborator, and
+no distribution of those versions to any third party was identified.
+
+Third-party dependencies retain their own licenses. The pinned Firecracker,
+jailer and guest kernel binaries fetched by scripts/fetch-firecracker.sh are
+Apache License 2.0 works of their own authors and are not relicensed here.

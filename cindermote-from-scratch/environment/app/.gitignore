@@ -1,0 +1,68 @@
+# Python-generated files
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+
+# Tool caches and coverage output
+.venv/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+coverage.json
+htmlcov/
+
+# Local secrets and machine state
+.env
+.env.*
+*.env
+!.env.example
+!.env.*.example
+.observer_key
+policy/agent-probe-quarantine.x25519.pub
+.tainted_hosts
+.decommissioned_hosts
+gate/override.json
+credentials.json
+credentials.*.json
+secrets.json
+secrets.*.json
+token.json
+token.*.json
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.token
+*.secret
+
+# Generated execution evidence
+alerts/
+quarantine/
+receipts/
+mf-run-*
+cf-run-*
+*.sealed
+scratch/
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+*.pcap
+*.pcapng
+
+# Legacy snapshot, built from the host on first use (host-specific, ~25 MB)
+policy/golden-snapshot.tar.gz
+policy/golden-snapshot.manifest
+
+# Pinned runtime assets and generated microVM images
+.cindermote/cache/
+.cindermote/runtime/
+.cindermote/
+
+# Generated release packages
+dist/
