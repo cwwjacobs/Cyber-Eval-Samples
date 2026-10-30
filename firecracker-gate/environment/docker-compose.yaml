@@ -1,0 +1,5 @@
+services:
+  main:
+    devices:
+      - /dev/kvm
+    shm_size: 1g

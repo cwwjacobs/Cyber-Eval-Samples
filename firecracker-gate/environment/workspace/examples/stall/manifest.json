@@ -1,0 +1,31 @@
+{
+  "authority_tools": [
+    "change_policy"
+  ],
+  "budgets": {
+    "frame_idle_sec": 10,
+    "hello_timeout_sec": 3,
+    "max_calls": 8,
+    "max_evidence_bytes": 1048576,
+    "max_frame_bytes": 65536,
+    "max_total_bytes": 1048576,
+    "wall_clock_sec": 60
+  },
+  "declared_tools": [
+    "read_doc",
+    "list_docs"
+  ],
+  "job_id": "job-examplestall",
+  "prohibited_tools": [
+    "read_secret",
+    "run_shell",
+    "post_url",
+    "install_package"
+  ],
+  "schema": "fcgate-job/v1",
+  "target_sha256": "e66f81605280dbe3e3294460d7f08480c5524c508e255ca778cea4495d12a9a3",
+  "vm": {
+    "mem_mib": 128,
+    "vcpus": 1
+  }
+}

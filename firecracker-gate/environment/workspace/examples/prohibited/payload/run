@@ -1,0 +1,10 @@
+# Requests a tool the manifest prohibits. The VM must stop here.
+import time
+
+import labguest
+
+session = labguest.Session()
+session.hello()
+session.propose("list_docs")
+session.propose("read_secret")
+time.sleep(3600)

@@ -1,0 +1,10 @@
+# A well-behaved session: two allowed calls, two evidence chunks, a final frame.
+import labguest
+
+session = labguest.Session()
+session.hello()
+session.propose("list_docs")
+session.propose("read_doc", b"overview")
+session.evidence(b"first chunk of transcript")
+session.evidence(b"second chunk of transcript")
+session.final()

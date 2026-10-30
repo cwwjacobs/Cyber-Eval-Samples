@@ -1,0 +1,10 @@
+# Sends half a frame, then closes the connection and stays up.
+import time
+
+import labguest
+
+session = labguest.Session()
+session.hello()
+session.sock.sendall(b"\x00\x00\x00\x40{\"args")
+session.sock.close()
+time.sleep(3600)

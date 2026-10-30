@@ -1,0 +1,13 @@
+firecracker-gate
+Copyright 2026 Corey Jacobs
+
+Licensed under the PolyForm Noncommercial License 1.0.0 (see LICENSE).
+Commercial licensing: Corey Jacobs <coresynth@gmail.com>
+
+Anyone considering a paid engagement with the author may run, copy internally and review this task,
+including its reference solution and verifier, to evaluate it as a sample. This notice grants no
+other commercial use.
+
+Firecracker (Apache License 2.0) and the Linux guest kernel (GPL-2.0) are not in this folder. The
+Docker build downloads them from their publishers, pinned by SHA-256, and they keep their own
+licenses, as do the Debian packages the build installs.

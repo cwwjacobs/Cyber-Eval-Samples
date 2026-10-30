@@ -5,6 +5,7 @@ Sample long-horizon evaluation tasks in the [Harbor](https://github.com/harbor-f
 | Task | Kind | What the agent does |
 |---|---|---|
 | [`cindermote-from-scratch`](cindermote-from-scratch/README.md) | Long-horizon software engineering, security domain | Builds Cindermote, a fail-closed containment runtime for untrusted AI-agent material, from its documentation and test suite, with none of its Python source provided |
+| [`firecracker-gate`](firecracker-gate/README.md) | Cybersecurity | Builds, from a spec, a fail-closed gate around a real Firecracker microVM, graded on real VMs against 269 cases of misbehaving guests. Needs a Docker host with `/dev/kvm`. |
 
 Each task folder contains `instruction.md`, `task.toml`, a Docker environment, a verifier that writes a reward, and a reference solution in `solution/solve.sh`:
 

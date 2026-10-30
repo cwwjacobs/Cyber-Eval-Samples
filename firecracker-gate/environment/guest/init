@@ -1,0 +1,12 @@
+#!/usr/bin/python3 -S
+# Guest init: mount, run the job's payload as root, reboot. With reboot=k a reboot ends the VMM.
+import os
+import subprocess
+
+BUSYBOX = "/bin/busybox"
+for fstype, target in (("proc", "/proc"), ("sysfs", "/sys"), ("devtmpfs", "/dev"), ("tmpfs", "/tmp")):
+    subprocess.run([BUSYBOX, "mount", "-t", fstype, fstype, target], check=False)
+subprocess.run([BUSYBOX, "mount", "-t", "ext4", "-o", "ro", "/dev/vdb", "/job"], check=False)
+env = {"PATH": "/usr/bin:/bin", "PYTHONPATH": "/opt/lab", "PYTHONDONTWRITEBYTECODE": "1", "HOME": "/tmp"}
+subprocess.run(["/usr/bin/python3", "/job/payload/run"], env=env, check=False)
+os.execv(BUSYBOX, ["busybox", "reboot", "-f"])
