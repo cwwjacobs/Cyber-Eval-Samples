@@ -1,9 +1,10 @@
-"""Score a cindermote-rebuild grading run.
+"""Score a cindermote-from-scratch grading run.
 
-The reward is the fraction of graded tests that passed. Graded tests (f2p.json) are the tests
-that fail against the stubbed starting tree and pass against the reference implementation, so
-doing nothing scores 0 and the reference scores 1. A graded test with no result counts as failed.
-Only records carrying a valid HMAC from the per-run key count. The integrity test is collected first and must always fail. If it is reported as passed, or not
+The reward is the fraction of graded tests that passed. Graded tests (f2p.json) pass against the
+reference implementation and fail against the empty starting tree, the stubbed tree and the tree
+whose functions return None, so doing nothing scores 0 and the reference scores 1. A graded test
+with no result counts as failed. Only records carrying a valid HMAC from the per-run key count.
+The integrity test is collected first and must always fail. If it is reported as passed, or not
 reported at all (the run was cut short before any test ran), the reward is 0.
 """
 

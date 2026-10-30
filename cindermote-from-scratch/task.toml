@@ -1,5 +1,11 @@
 schema_version = "1.4"
 
+# Grading runs in a fresh container built from environment/, into which Harbor restores the
+# agent's /app (see [verifier] environment_mode), so nothing the agent left running reaches it.
+[[artifacts]]
+source = "/app/"
+exclude = ["**/.git/**", "**/__pycache__/**"]
+
 [task]
 name = "cwwjacobs/cindermote-from-scratch"
 description = "Build Cindermote, a fail-closed containment runtime for untrusted AI-agent material (Firecracker microVM orchestration, a pinned-DNS egress proxy, HPKE-sealed evidence and HMAC-signed receipts), from its documentation and test suite, with none of its Python source provided."
@@ -19,6 +25,7 @@ user = "agent"
 # The full suite takes about a minute; the rest is headroom for slow or hanging candidates.
 timeout_sec = 1800.0
 user = "root"
+environment_mode = "separate"
 
 [environment]
 build_timeout_sec = 1800.0

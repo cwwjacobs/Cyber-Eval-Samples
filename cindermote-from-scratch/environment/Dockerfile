@@ -1,4 +1,4 @@
-# Environment for cindermote-rebuild: a stubbed Cindermote source tree to reimplement.
+# Environment for cindermote-from-scratch: a Cindermote checkout with all of its Python source removed.
 # The Python patch version matches the one the graded-test list (tests/f2p.json) was computed with.
 FROM python:3.11.15-slim-bookworm@sha256:d29f48a31a8b408ed19272ca1e7b10ebae13b240a27e862d3d4217c528e2e0c3
 

@@ -110,7 +110,7 @@ def main() -> int:
                              capture_output=True, text=True).stdout.strip()
     commit_file = TASK_DIR / "tools" / "SOURCE_COMMIT"
     report = {
-        "description": "Graded tests: pass in every reference run, do not pass on the stubbed tree.",
+        "description": "Graded tests: pass in every reference run and in none of the baseline trees (empty, stubbed, returns None).",
         "source_commit": commit_file.read_text().strip() if commit_file.exists() else None,
         "python": version,
         "reference_runs": args.runs,

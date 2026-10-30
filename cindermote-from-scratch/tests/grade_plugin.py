@@ -1,4 +1,4 @@
-"""Pytest plugin for the cindermote-rebuild verifier.
+"""Pytest plugin for the cindermote-from-scratch verifier.
 
 Records one outcome per test node id and writes each decision to the verifier's results channel as
 soon as it is known, so a crash or a timeout later in the run cannot erase earlier results. A test is

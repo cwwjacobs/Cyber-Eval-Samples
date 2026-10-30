@@ -34,8 +34,9 @@ cp "$HERE/grade_plugin.py" "$WORK/lib/"
 # pytest puts the implementation on sys.path only after pytest itself has been imported.
 printf '[pytest]\npythonpath = %s\n' "$WORK/app" > "$WORK/lib/pytest.ini"
 
-# Cindermote's trusted-source gates reject group- or world-writable files.
-chmod -R go-w "$WORK/app"
+# Reset modes, whatever the copy into this container preserved: Cindermote's trusted-source
+# gates reject group- or world-writable files, and the grader must be able to read every file.
+chmod -R u+rwX,go-w "$WORK/app"
 chown -R "$GRADER_USER:$GRADER_USER" "$WORK/app" "$WORK/home"
 chmod 755 "$WORK" "$WORK/lib"
 chmod 644 "$WORK/lib/grade_plugin.py" "$WORK/lib/pytest.ini"

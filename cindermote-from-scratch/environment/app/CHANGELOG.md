@@ -16,9 +16,9 @@ also unreleased; see the README's *Repair and evidence*.
 
 - License changed from Apache License 2.0 to the PolyForm Noncommercial License
   1.0.0 (`LICENSE`, `LICENSE.md`, `COMMERCIAL_LICENSE.md`, `NOTICE`, README). Commercial
-  use now requires a separate written agreement with Corey Jacobs. Earlier commits
-  keep the terms that accompanied them; no third-party distribution of those
-  versions was identified (private repository, no forks, one collaborator).
+  use now requires a separate written agreement with Corey Jacobs. Commits before
+  2026-10-30 carried an Apache License 2.0 file and keep the terms that accompanied
+  them.
 
 ### Removed
 

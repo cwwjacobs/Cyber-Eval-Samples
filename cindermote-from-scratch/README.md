@@ -33,7 +33,7 @@ Cross-module tests (the vertical spine, the browser receipts, the supported-host
 | Path | Purpose |
 |---|---|
 | `instruction.md` | What the agent is told, including the allowed top-level layout and the exact evidence-cryptography API the held-out tests call |
-| `task.toml` | Budgets, users and resources. The agent runs as `agent` and the verifier as `root`; egress is limited to an installed agent's model endpoint |
+| `task.toml` | Budgets, users and resources. The agent runs as `agent`; the verifier runs as `root` in a separate container that receives the agent's `/app`. Egress is limited to an installed agent's model endpoint |
 | `environment/Dockerfile`, `environment/app/` | The starting tree (no Python source) and the public tests. The base is the official `python:3.11.15-slim-bookworm`, pinned by digest |
 | `tests/test.sh` | Verifier entry point. Writes `/logs/verifier/reward.txt` and a per-file breakdown in `grading.json` |
 | `tests/run_suite.sh`, `grade_plugin.py`, `score.py`, `toplevel.txt` | Grading harness |
@@ -44,10 +44,10 @@ Cross-module tests (the vertical spine, the browser receipts, the supported-host
 
 ## Grading
 
-`test.sh` performs these steps:
+Grading runs in a separate container (`environment_mode = "separate"`). Harbor builds it from the same `environment/` and restores the agent's `/app` into it, without `.git` or `__pycache__`, so no process the agent started is alive during grading. `test.sh` then performs these steps:
 
-1. Makes `/tests` root-only, kills every process the agent left running and removes anything planted in `/logs/verifier`.
-2. Snapshots only the top-level entries the reference tree has (`toplevel.txt`, also listed in the instruction), then adds pristine copies of the public tests (baked into the image, root-owned) and the held-out tests.
+1. Makes `/tests` root-only. As a second line of defence, it kills any process running as `agent` and removes anything planted in `/logs/verifier`.
+2. Snapshots only the top-level entries the reference tree has (`toplevel.txt`, also listed in the instruction), then adds pristine copies of the public tests (baked into the image, root-owned) and the held-out tests. The snapshot's ownership and modes are reset, whatever the copy between containers preserved.
 3. Runs pytest as the unprivileged `grader` user. Python starts with `-P` and plugin autoloading off, so nothing in the snapshot can shadow or extend pytest. It also uses `--noconftest`, an explicit config, a scrubbed environment and a 120-second limit per test.
    - Each outcome is recorded as it happens, signed with HMAC under a per-run key. The key reaches the plugin on a private file descriptor that it reads and closes before any graded module loads.
    - Records go through a FIFO into a file only root can write. Graded code can add lines but never remove one, and unsigned or wrongly signed lines are ignored.
@@ -75,7 +75,7 @@ Doing nothing, a body-less skeleton, or returning nothing everywhere therefore s
 
 ## Scores measured before submission
 
-These runs used a mock of the container layout on Linux with the same Python, Docker-like seccomp and no network. That is not Docker itself; `harbor run -a oracle` and `-a nop` in Docker are the authoritative checks.
+These runs used a mock of the container layout on Linux with the same Python, Docker-like seccomp and no network. That is not Docker itself; `harbor run -a oracle` and `-a nop` in Docker are the authoritative checks. Oracle and nop were rerun with the separate verifier container emulated (`/app` copied into a fresh tree and owned by root), with the same results; the oracle still scored 1.000000 with every executable bit dropped in the copy.
 
 | Scenario | Reward |
 |---|---|
@@ -93,22 +93,20 @@ A full grading run takes about 25 seconds.
 
 ## Calibration (estimates, not measurements)
 
-Two independent reviews of this variant, one bottom-up by subsystem and one by comparison with FrontierSWE v2 tasks, produced these estimates:
+Two independent reviews of this variant, one bottom-up by subsystem and one by comparison with FrontierSWE v2 tasks, produced these estimates for a human engineer:
 
 | Who | Target | Estimate |
 |---|---|---|
 | Senior engineer, no AI help | 50% of graded tests | about 95 focused hours (range 65–135) |
 | Senior engineer, no AI help | Finishing | about 300 focused hours (range 215–415), or 2–3 calendar months; top-down, 350–500 hours to pass at least 95% |
-| Strongest current agents | 20 hours | about 0.65–0.80 |
-| Mid-tier agents | 20 hours | about 0.25–0.70 |
 
 - **Held-out set:** all 26 held-out tests are fully determined by the instruction, RFC 9180 and libsodium's documented semantics.
-- **Not yet measured:** there are no real agent rollouts yet.
+- **Agents:** no estimate is given. With 459 of the 485 graded tests visible, an agent can build against nearly the whole grader, so agents may score far higher, far sooner than these human estimates suggest; measure them with real runs. A harder variant would add held-out tests written from the specification.
 
 ## Residual risk
 
 - **Targeted in-process tampering.** Graded code necessarily runs inside the test process. Rewriting or forging the results file fails without the per-run key, and blanket rewriting is caught by the integrity test. An agent that reads the grader plugin and digs its key out of the process's memory, or rewrites the reports of specific known tests in-process, could still forge results. That is deliberate exploitation of the grader; it is the same exposure as SWE-bench-style tasks, and transcripts should be reviewed for it.
-- **Shared-mode upload window.** The verifier runs in Harbor's default shared mode, and Harbor uploads `tests/` into the running container just before `test.sh` starts. A daemon that outlived the agent session could read the held-out tests in that window. FrontierSWE's `[verifier] environment_mode = "separate"` closes the window. It is not enabled here because it has not been exercised with this task.
+- **What crosses into the verifier.** Grading runs in a separate container, so a process the agent left running cannot read the held-out tests as they are uploaded, stop `test.sh` or write its own reward, as it could in Harbor's default shared mode. What crosses over is the agent's `/app`, which the verifier treats as untrusted: it carries only the reference's top-level entries into the snapshot and runs it as the unprivileged `grader` user.
 
 ## Reference solution
 

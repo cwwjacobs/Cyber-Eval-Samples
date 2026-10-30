@@ -1,5 +1,6 @@
 #!/bin/bash
-# Verifier for cindermote-rebuild. Harbor runs it as root once the agent has stopped.
+# Verifier for cindermote-from-scratch. Harbor runs it as root in a fresh container built from
+# environment/, after restoring the agent's /app into it (environment_mode = "separate").
 # It grades /app with the public and held-out tests (run_suite.sh) and writes the fraction of
 # graded tests that pass to /logs/verifier/reward.txt (score.py).
 set -uo pipefail
